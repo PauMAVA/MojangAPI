@@ -6,8 +6,9 @@
 
     <groupId>MojangAPI</groupId>
     <artifactId>MojangAPI</artifactId>
-    <version>2019-0.1</version>
+    <version>2020-0.2</version>
     <build>
+        <sourceDirectory>src</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -15,6 +16,19 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
+                            <mainClass>me.PauMAVA.MojangAPI.MojangAPI</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
@@ -37,6 +51,5 @@
             <version>3.9</version>
         </dependency>
     </dependencies>
-
 
 </project>

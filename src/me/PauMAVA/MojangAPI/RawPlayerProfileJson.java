@@ -1,6 +1,6 @@
 /*
  * MojangAPI
- * Copyright (c) 2019  Pau Machetti Vallverdú
+ * Copyright (c) 2019  Pau Machetti VallverdÃº
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,39 +18,28 @@
 
 package me.PauMAVA.MojangAPI;
 
+import java.util.List;
 import java.util.UUID;
 
-public class PlayerProfileJson  extends PlayerProfile {
+public class RawPlayerProfileJson extends PlayerProfile {
 
-    String profileId;
-    String profileName;
-
-    Textures textures;
+    private String id;
+    private String name;
+    private List<RawPlayerProfileProperty> properties;
 
     public String getId() {
-        return profileId;
+        return id;
     }
 
     public UUID getUUID() {
-        return UUID.fromString(String.format("%s-%s-%s-%s-%s", profileId.substring(0,8), profileId.substring(8,12), profileId.substring(12,16), profileId.substring(16,20), profileId.substring(20)));
+        return UUID.fromString(String.format("%s-%s-%s-%s-%s", id.substring(0,8), id.substring(8,12), id.substring(12,16), id.substring(16,20), id.substring(20)));
     }
 
     public String getName() {
-        return profileName;
+        return name;
     }
 
-    public Textures getTextures() {
-        return textures;
-    }
-
-    @Override
-    public String toString() {
-        return "{\n" +
-                "profileId: " + profileId + "\n" +
-                "profileName: " + profileName + "\n" +
-                "url: " + textures.getSkin().getUrl() + "\n" +
-                "}";
+    public List<RawPlayerProfileProperty> getProperties() {
+        return properties;
     }
 }
-
-

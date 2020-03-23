@@ -45,7 +45,7 @@ public class PlayerInfoHandler {
         }
     }
 
-    public PlayerProfileJson getPlayerProfile(UUID uuid) {
+    private <T> PlayerProfile getPlayerProfile(UUID uuid, Class<T> classType) {
         if(!httpHandler.checkService(MojangService.MOJANG_API)) {
             System.out.println("Unavaiable service: " + MojangService.MOJANG_API.getKey());
             return new PlayerProfileJson();
@@ -53,7 +53,7 @@ public class PlayerInfoHandler {
         try {
             HttpURLConnection conn = httpHandler.getHTTPConnection(MojangService.MOJANG_API, "profile", uuid.toString().replace("-", ""));
             assert conn != null;
-            PlayerProfileJson data = (PlayerProfileJson) httpHandler.fetchJSON(conn, PlayerProfileJson.class);
+            PlayerProfile data = (PlayerProfile) httpHandler.fetchJSON(conn, classType);
             return data;
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,8 +61,22 @@ public class PlayerInfoHandler {
         }
     }
 
+
+
     public PlayerProfileJson getPlayerProfile(String playerName) {
-        return getPlayerProfile(fetchUUID(playerName));
+        return (PlayerProfileJson) getPlayerProfile(fetchUUID(playerName), PlayerProfileJson.class);
+    }
+
+    public PlayerProfileJson getPlayerProfile(UUID uuid) {
+        return (PlayerProfileJson) getPlayerProfile(uuid, PlayerProfileJson.class);
+    }
+
+    public RawPlayerProfileJson getRawPlayerProfile(String playerName) {
+        return (RawPlayerProfileJson) getPlayerProfile(fetchUUID(playerName), RawPlayerProfileJson.class);
+    }
+
+    public RawPlayerProfileJson getRawPlayerProfile(UUID uuid) {
+        return (RawPlayerProfileJson) getPlayerProfile(uuid, RawPlayerProfileJson.class);
     }
 
 }

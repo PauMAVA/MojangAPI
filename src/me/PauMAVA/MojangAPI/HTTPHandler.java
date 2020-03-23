@@ -90,6 +90,8 @@ class HTTPHandler {
             return originalJSON.toString();
         } else if(destinationClass.equals(PlayerProfileJson.class)) {
             return "{" + StringUtils.substringBetween(originalJSON.toString(), "\"decoded\": {", "\"timestamp\":").replace("},", "}") + "}";
+        } else if (destinationClass.equals(RawPlayerProfileJson.class)) {
+            return "{" + StringUtils.substringBetween(originalJSON.toString(), "\"raw\": {", "\"status\":").replace("],", "]") + "}";
         }
         return "";
     }
