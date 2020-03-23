@@ -18,6 +18,8 @@
 
 package me.PauMAVA.MojangAPI;
 
+import java.util.UUID;
+
 public class PlayerProfileJson {
 
     String profileId;
@@ -25,11 +27,15 @@ public class PlayerProfileJson {
 
     Textures textures;
 
-    public String getProfileId() {
+    public String getId() {
         return profileId;
     }
 
-    public String getProfileName() {
+    public UUID getUUID() {
+        return UUID.fromString(String.format("%s-%s-%s-%s-%s", profileId.substring(0,8), profileId.substring(8,12), profileId.substring(12,16), profileId.substring(16,20), profileId.substring(20)));
+    }
+
+    public String getName() {
         return profileName;
     }
 
@@ -44,30 +50,6 @@ public class PlayerProfileJson {
                 "profileName: " + profileName + "\n" +
                 "textures.SKIN.url: " + textures.getSkin().getUrl() + "\n" +
                 "}";
-    }
-}
-
-class Textures {
-    private Skin SKIN;
-
-    public Skin getSkin() {
-        return SKIN;
-    }
-}
-
-class Skin {
-    private String url;
-
-    public String getUrl() {
-        return url;
-    }
-}
-
-class Cape {
-    private String url;
-
-    public String getUrl() {
-        return url;
     }
 }
 

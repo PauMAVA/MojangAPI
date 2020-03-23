@@ -20,10 +20,6 @@ package me.PauMAVA.MojangAPI;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class PlayerInfoHandler {
@@ -49,21 +45,24 @@ public class PlayerInfoHandler {
         }
     }
 
-    public String getPlayerTexturesURL(String playerName) {
+    public PlayerProfileJson getPlayerProfile(UUID uuid) {
         if(!httpHandler.checkService(MojangService.MOJANG_API)) {
             System.out.println("Unavaiable service: " + MojangService.MOJANG_API.getKey());
-            return "";
+            return new PlayerProfileJson();
         }
         try {
-            HttpURLConnection conn = httpHandler.getHTTPConnection(MojangService.MOJANG_API, "profile", fetchUUID(playerName).toString().replace("-",""));
+            HttpURLConnection conn = httpHandler.getHTTPConnection(MojangService.MOJANG_API, "profile", uuid.toString().replace("-", ""));
             assert conn != null;
             PlayerProfileJson data = (PlayerProfileJson) httpHandler.fetchJSON(conn, PlayerProfileJson.class);
-            System.out.println(data.toString());
-            return data.getTextures().getSkin().getUrl();
+            return data;
         } catch (IOException e) {
             e.printStackTrace();
-            return "";
+            return new PlayerProfileJson();
         }
+    }
+
+    public PlayerProfileJson getPlayerProfile(String playerName) {
+        return getPlayerProfile(fetchUUID(playerName));
     }
 
 }

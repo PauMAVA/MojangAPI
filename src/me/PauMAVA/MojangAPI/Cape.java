@@ -1,6 +1,6 @@
 /*
  * MojangAPI
- * Copyright (c) 2019  Pau Machetti Vallverd�
+ * Copyright (c) 2019  Pau Machetti Vallverdú
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,27 +18,12 @@
 
 package me.PauMAVA.MojangAPI;
 
-public class MojangAPI {
+public class Cape {
+    private String url;
 
-    private static MojangAPI instance;
-    private final HTTPHandler httpHandler;
-    private final PlayerInfoHandler playerInfoHandler;
+    Cape() {}
 
-    public MojangAPI() {
-        instance = this;
-        this.httpHandler = new HTTPHandler();
-        this.playerInfoHandler = new PlayerInfoHandler();
-    }
-
-    static MojangAPI getInstance() {
-        return instance;
-    }
-
-    public HTTPHandler getHttpHandler() {
-        return this.httpHandler;
-    }
-
-    public PlayerInfoHandler getPlayerInfoHandler() {
-        return this.playerInfoHandler;
+    public String getUrl() {
+        return url;
     }
 }
