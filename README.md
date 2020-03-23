@@ -1,6 +1,25 @@
 # MojangAPI
 A java implementation of api.minetools.eu (Proxied Mojang API)
 
+Dependency import:
+```xml
+<repositories>
+  <repository>
+    <id>PauMAVen</id>
+    <url>https://raw.githubusercontent.com/PauMAVA/PauMAVen/master</url>
+  </repository>
+</repositories>
+<dependencies>
+  <dependency>
+    <groupId>me.PauMAVA</groupId>
+    <artifactId>MojangAPI</artifactId>
+    <version>2020-0.1</version>
+    <scope>provided</scope>
+	</dependency>
+</dependencies>
+```
+
+
 Creating MojangAPI instance:
 
 ```java
