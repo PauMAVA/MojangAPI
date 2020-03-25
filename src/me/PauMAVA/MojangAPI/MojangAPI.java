@@ -22,11 +22,15 @@ public class MojangAPI {
 
     private static MojangAPI instance;
     private final HTTPHandler httpHandler;
+    private final MojangAPICache mojangAPICache;
     private final PlayerInfoHandler playerInfoHandler;
+
+
 
     public MojangAPI() {
         instance = this;
         this.httpHandler = new HTTPHandler();
+        this.mojangAPICache = new MojangAPICache();
         this.playerInfoHandler = new PlayerInfoHandler();
     }
 
@@ -36,6 +40,10 @@ public class MojangAPI {
 
     public HTTPHandler getHttpHandler() {
         return this.httpHandler;
+    }
+
+    public MojangAPICache getMojangAPICache() {
+        return mojangAPICache;
     }
 
     public PlayerInfoHandler getPlayerInfoHandler() {

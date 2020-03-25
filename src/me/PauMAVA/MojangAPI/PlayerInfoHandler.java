@@ -38,7 +38,9 @@ public class PlayerInfoHandler {
             UsernameToUUIDJson data = (UsernameToUUIDJson) httpHandler.fetchJSON(conn, UsernameToUUIDJson.class);
             String stringUUID = (String) data.getClass().getDeclaredField("id").get(data);
             stringUUID = String.format("%s-%s-%s-%s-%s", stringUUID.substring(0,8), stringUUID.substring(8,12), stringUUID.substring(12,16), stringUUID.substring(16,20), stringUUID.substring(20));
-            return UUID.fromString(stringUUID);
+            UUID result = UUID.fromString(stringUUID);
+            api.getMojangAPICache().saveUUID(playerName, result);
+            return result;
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
             return null;
@@ -54,6 +56,7 @@ public class PlayerInfoHandler {
             HttpURLConnection conn = httpHandler.getHTTPConnection(MojangService.MOJANG_API, "profile", uuid.toString().replace("-", ""));
             assert conn != null;
             PlayerProfile data = (PlayerProfile) httpHandler.fetchJSON(conn, classType);
+            api.getMojangAPICache().saveProfile(uuid, data, classType);
             return data;
         } catch (IOException e) {
             e.printStackTrace();
