@@ -23,11 +23,14 @@ import java.util.UUID;
 
 public class MojangAPICache {
 
+    private MojangAPI api;
+
     private HashMap<String, UUID> UUIDcache;
     private HashMap<UUID, PlayerProfileJson> decodedProfileCache;
     private HashMap<UUID, RawPlayerProfileJson> rawProfileCache;
 
-    MojangAPICache() {
+    MojangAPICache(MojangAPI api) {
+        this.api = api;
         this.UUIDcache = new HashMap<>();
         this.decodedProfileCache = new HashMap<>();
         this.rawProfileCache = new HashMap<>();
@@ -72,7 +75,8 @@ public class MojangAPICache {
     }
 
     public boolean hasCachedUUID(String playerName) {
-        return this.UUIDcache.containsKey(playerName);
+        System.out.println(UUIDcache.toString());
+        return this.UUIDcache.keySet().contains(playerName);
     }
 
     public boolean hasCachedDecodedProfile(String playerName) {
@@ -101,7 +105,7 @@ public class MojangAPICache {
     private UUID checkUUID(String playerName) {
         UUID uuid = getUUID(playerName);
         if (uuid == null) {
-            return MojangAPI.getInstance().getPlayerInfoHandler().fetchUUID(playerName);
+            return api.getPlayerInfoHandler().fetchUUID(playerName, false);
         }
         return uuid;
     }

@@ -20,7 +20,8 @@ package me.PauMAVA.MojangAPI;
 
 public class MojangAPI {
 
-    private static MojangAPI instance;
+    private static final MojangAPICache staticCache = new MojangAPICache(new MojangAPI());
+
     private final HTTPHandler httpHandler;
     private final MojangAPICache mojangAPICache;
     private final PlayerInfoHandler playerInfoHandler;
@@ -28,14 +29,9 @@ public class MojangAPI {
 
 
     public MojangAPI() {
-        instance = this;
-        this.httpHandler = new HTTPHandler();
-        this.mojangAPICache = new MojangAPICache();
-        this.playerInfoHandler = new PlayerInfoHandler();
-    }
-
-    static MojangAPI getInstance() {
-        return instance;
+        this.httpHandler = new HTTPHandler(this);
+        this.mojangAPICache = new MojangAPICache(this);
+        this.playerInfoHandler = new PlayerInfoHandler(this);
     }
 
     public HTTPHandler getHttpHandler() {
@@ -48,5 +44,9 @@ public class MojangAPI {
 
     public PlayerInfoHandler getPlayerInfoHandler() {
         return this.playerInfoHandler;
+    }
+
+    public static MojangAPICache getStaticCache() {
+        return staticCache;
     }
 }

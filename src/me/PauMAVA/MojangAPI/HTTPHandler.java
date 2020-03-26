@@ -29,6 +29,12 @@ import java.net.URL;
 
 class HTTPHandler {
 
+    private MojangAPI api;
+
+    HTTPHandler(MojangAPI api) {
+        this.api = api;
+    }
+
     HttpURLConnection getHTTPConnection(MojangService service, String... args) throws NullPointerException {
         try {
             StringBuilder sb = new StringBuilder("https://" + service.getKey());
@@ -89,7 +95,8 @@ class HTTPHandler {
         } else if(destinationClass.equals(UsernameToUUIDJson.class)) {
             return originalJSON.toString();
         } else if(destinationClass.equals(PlayerProfileJson.class)) {
-            return "{" + StringUtils.substringBetween(originalJSON.toString(), "\"decoded\": {", "\"timestamp\":").replace("},", "}") + "}";
+            String section = StringUtils.substringBetween(originalJSON.toString(), "\"decoded\": {", "\"timestamp\":");
+            return "{" + section.substring(0, section.lastIndexOf(",")) + "}";
         } else if (destinationClass.equals(RawPlayerProfileJson.class)) {
             return "{" + StringUtils.substringBetween(originalJSON.toString(), "\"raw\": {", "\"status\":").replace("],", "]") + "}";
         }

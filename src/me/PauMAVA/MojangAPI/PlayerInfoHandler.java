@@ -24,10 +24,15 @@ import java.util.UUID;
 
 public class PlayerInfoHandler {
 
-    private final MojangAPI api = MojangAPI.getInstance();
-    private final HTTPHandler httpHandler = api.getHttpHandler();
+    private final MojangAPI api;
+    private final HTTPHandler httpHandler;
 
-    public UUID fetchUUID(String playerName) throws NullPointerException {
+    PlayerInfoHandler(MojangAPI api) {
+        this.api = api;
+        this.httpHandler = api.getHttpHandler();
+    }
+
+    UUID fetchUUID(String playerName, boolean cache) {
         if(!httpHandler.checkService(MojangService.MOJANG_API)) {
             System.out.println("Unavaiable service: " + MojangService.MOJANG_API.getKey());
             return null;
@@ -39,12 +44,19 @@ public class PlayerInfoHandler {
             String stringUUID = (String) data.getClass().getDeclaredField("id").get(data);
             stringUUID = String.format("%s-%s-%s-%s-%s", stringUUID.substring(0,8), stringUUID.substring(8,12), stringUUID.substring(12,16), stringUUID.substring(16,20), stringUUID.substring(20));
             UUID result = UUID.fromString(stringUUID);
-            api.getMojangAPICache().saveUUID(playerName, result);
+            if (cache) {
+                api.getMojangAPICache().saveUUID(playerName, result);
+                MojangAPI.getStaticCache().saveUUID(playerName, result);
+            }
             return result;
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public UUID fetchUUID(String playerName) {
+        return fetchUUID(playerName, true);
     }
 
     private <T> PlayerProfile getPlayerProfile(UUID uuid, Class<T> classType) {
@@ -57,14 +69,13 @@ public class PlayerInfoHandler {
             assert conn != null;
             PlayerProfile data = (PlayerProfile) httpHandler.fetchJSON(conn, classType);
             api.getMojangAPICache().saveProfile(uuid, data, classType);
+            MojangAPI.getStaticCache().saveProfile(uuid, data, classType);
             return data;
         } catch (IOException e) {
             e.printStackTrace();
             return new PlayerProfileJson();
         }
     }
-
-
 
     public PlayerProfileJson getPlayerProfile(String playerName) {
         return (PlayerProfileJson) getPlayerProfile(fetchUUID(playerName), PlayerProfileJson.class);

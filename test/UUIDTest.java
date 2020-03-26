@@ -1,6 +1,6 @@
 /*
  * MojangAPI
- * Copyright (c) 2019  Pau Machetti Vallverdú
+ * Copyright (c) 2019  Pau Machetti VallverdÃº
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.PauMAVA.MojangAPI;
+import me.PauMAVA.MojangAPI.MojangAPI;
+import org.junit.jupiter.api.Test;
 
-public class Test {
+import java.util.UUID;
 
-    public static void main(String args[]) {
-        MojangAPI api = new MojangAPI();
-        System.out.println(api.getPlayerInfoHandler().fetchUUID("GoldLord_").toString());
+import static org.junit.jupiter.api.Assertions.*;
+
+public class UUIDTest {
+
+    private MojangAPI mojangAPI;
+
+    public UUIDTest() {
+        this.mojangAPI = new MojangAPI();
+    }
+
+    @Test
+    public void testUUID() {
+        assertEquals(mojangAPI.getPlayerInfoHandler().fetchUUID("GoldLord_"), UUID.fromString("0006f9f3-bde9-4d12-9271-18502d8053dd"));
     }
 }
