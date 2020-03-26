@@ -17,7 +17,7 @@ Dependency import:
     <artifactId>MojangAPI</artifactId>
     <version>2020-0.1</version>
     <scope>provided</scope>
-	</dependency>
+  </dependency>
 </dependencies>
 ```
 
@@ -105,3 +105,77 @@ String name = textures.getName(); // The property name (for texture properties i
 String value = textures.getValue(); // The encoded property value
 String signature = textures.getSignature(); // The property signature.
 ```
+
+## Caching
+The API will automatically cache all requests made (UUID, decoded profiles, raw profiles) so that you don't need to request them again if needed.
+
+### Internal cache
+Every instance will save all requests inside a `MojangAPICache` object which can be obtained via:
+```java
+MojangAPI api = new MojangAPI();
+MojangAPICache cache = api.getMojangAPICache();
+```
+These are the methods supplied by `MojangAPICache` class:
+- Get cached UUID:
+```java
+cache.getUUID("playerName"); // Returns an object of type UUID or null if not cached.
+```
+- Get cached decoded profile:
+```java
+cache.getDecodedProfile("playerName"); // Returns an object of type PlayerProfileJson or null if not cached.
+```
+- Get cached raw profile:
+```java
+cache.getDecodedProfile("playerName"); // Returns an object of type RawPlayerProfileJson or null if not cached.
+```
+- Check if UUID is cached:
+```java
+cache.hasCachedUUID("playerName"); // Returns true if UUID is in cache or false if not.
+```
+- Check if decoded profile is cached:
+```java
+cache.hasCachedDecodedProfile("playerName"); // Returns true if PlayerProfileJson is in cache or false if not.
+```
+- Check if raw player profile is cached:
+```java
+cache.hasCachedRawProfile("playerName"); // Returns true if RawPlayerProfileJson is in cache or false if not.
+```
+- Clean cache:
+```java
+cache.cleanCache("playerName"); // Removes all cached data related to that player.
+cache.cleanCache(); // Resets all cache for that MojangAPICache instance.
+```
+- Get full cache:
+```java
+HashMap<String, UUID> uuidCache = cache.getUUIDcache();
+HashMap<UUID, PlayerProfileJson> decodedProfilesCache = cache.getDecodedProfileCache();
+HashMap<UUID, RawPlayerProfileJson> rawProfilesCache = cache.getRawProfileCache();
+```
+You can have multiple instances of the API, and each one will contain its own cache. Example:
+```java
+MojangAPI api1 = new MojangAPI();
+MojangAPI api2 = new MojangAPI();
+api1.fecthUUID("player1");
+api2.fetchUUID("player2");
+
+api1.getMojangAPICache().hasCachedUUID("player1"); // true
+api1.getMojangAPICache().hasCachedUUID("player2"); // false
+
+api2.getMojangAPICache().hasCachedUUID("player1"); // false
+api2.getMojangAPICache().hasCachedUUID("player2"); // true
+```
+So you cannot access cached data made on a different api instance via internal cache.
+
+### Static cache
+Meanwhile, all requests made by all instances cache data into a static `MojangCacheAPI` which will contain all requests made by all instances:
+```java
+MojangAPI api1 = new MojangAPI();
+MojangAPI api2 = new MojangAPI();
+api1.fecthUUID("player1");
+api2.fetchUUID("player2");
+
+MojangAPI.getStaticCache().hasCachedUUID("player1"); // true
+MojangAPI.getStaticCache().hasCachedUUID("player2"); // true
+```
+You can access cache data made on multiple api instances via static cache.
+
