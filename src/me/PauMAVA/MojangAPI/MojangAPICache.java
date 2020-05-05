@@ -65,37 +65,52 @@ public class MojangAPICache {
     }
 
     public PlayerProfileJson getDecodedProfile(String playerName) {
-        UUID uuid = checkUUID(playerName);
-        return decodedProfileCache.get(uuid);
+        return getDecodedProfile(checkUUID(playerName));
     }
 
     public RawPlayerProfileJson getRawProfile(String playerName) {
-        UUID uuid = checkUUID(playerName);
-        return rawProfileCache.get(uuid);
+        return getRawProfile(checkUUID(playerName));
     }
 
     public boolean hasCachedUUID(String playerName) {
-        System.out.println(UUIDcache.toString());
-        return this.UUIDcache.keySet().contains(playerName);
+        return this.UUIDcache.containsKey(playerName);
     }
 
     public boolean hasCachedDecodedProfile(String playerName) {
-        UUID uuid = checkUUID(playerName);
-        return this.decodedProfileCache.containsKey(uuid);
+        return hasCachedDecodedProfile(checkUUID(playerName));
     }
 
     public boolean hasCachedRawProfile(String playerName) {
-        UUID uuid = checkUUID(playerName);
+        return hasCachedRawProfile(checkUUID(playerName));
+    }
+
+    public boolean hasCachedDecodedProfile(UUID uuid) {
+        return this.decodedProfileCache.containsKey(uuid);
+    }
+
+    public boolean hasCachedRawProfile(UUID uuid) {
         return this.rawProfileCache.containsKey(uuid);
     }
+
+    public PlayerProfileJson getDecodedProfile(UUID uuid) {
+        return decodedProfileCache.get(uuid);
+    }
+
+    public RawPlayerProfileJson getRawProfile(UUID uuid) {
+        return rawProfileCache.get(uuid);
+    }
+
 
     public void cleanCache(String playerName) {
         UUID uuid = checkUUID(playerName);
         this.UUIDcache.remove(playerName);
+        cleanCache(uuid);
+    }
+
+    public void cleanCache(UUID uuid) {
         this.decodedProfileCache.remove(uuid);
         this.rawProfileCache.remove(uuid);
     }
-
     public void cleanCache() {
         this.UUIDcache = new HashMap<>();
         this.decodedProfileCache = new HashMap<>();

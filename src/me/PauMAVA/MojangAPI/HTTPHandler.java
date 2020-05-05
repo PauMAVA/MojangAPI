@@ -41,7 +41,9 @@ class HTTPHandler {
             for (String s: args) {
                 sb.append("/").append(s);
             }
-            System.out.println(sb.toString());
+            if (api.isVerbose()) {
+                System.out.println(sb.toString());
+            }
             URL statusServer = new URL(sb.toString());
             HttpURLConnection conn = (HttpURLConnection) statusServer.openConnection();
             return conn;
@@ -64,7 +66,9 @@ class HTTPHandler {
                 builder.append(nextString).append("\n");
             }
             reader.close();
-            System.out.println("Reformatted JSON: " + reformatJSON(builder, destinationClass));
+            if (api.isVerbose()) {
+                System.out.println("Reformatted JSON: " + reformatJSON(builder, destinationClass));
+            }
             GsonBuilder gson = new GsonBuilder();
             return gson.create().fromJson(reformatJSON(builder, destinationClass), destinationClass);
         } else {

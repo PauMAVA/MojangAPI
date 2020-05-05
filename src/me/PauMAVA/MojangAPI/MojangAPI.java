@@ -26,12 +26,17 @@ public class MojangAPI {
     private final MojangAPICache mojangAPICache;
     private final PlayerInfoHandler playerInfoHandler;
 
-
+    private boolean verbose;
 
     public MojangAPI() {
+        this(false);
+    }
+
+    public MojangAPI(boolean verbose) {
         this.httpHandler = new HTTPHandler(this);
         this.mojangAPICache = new MojangAPICache(this);
         this.playerInfoHandler = new PlayerInfoHandler(this);
+        this.verbose = verbose;
     }
 
     public HTTPHandler getHttpHandler() {
@@ -44,6 +49,14 @@ public class MojangAPI {
 
     public PlayerInfoHandler getPlayerInfoHandler() {
         return this.playerInfoHandler;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
     }
 
     public static MojangAPICache getStaticCache() {

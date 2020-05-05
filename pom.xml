@@ -6,7 +6,7 @@
 
     <groupId>MojangAPI</groupId>
     <artifactId>MojangAPI</artifactId>
-    <version>2020-0.3</version>
+    <version>2020-0.4</version>
     <build>
         <sourceDirectory>src</sourceDirectory>
         <plugins>
