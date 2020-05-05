@@ -17,7 +17,7 @@ Dependency import:
     <artifactId>MojangAPI</artifactId>
     <version>2020-0.4</version>
     <scope>provided</scope>
-	</dependency>
+  </dependency>
 </dependencies>
 ```
 
